@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/jvqtil/gmfi/utils"
 	"github.com/fatih/color"
 )
 
@@ -36,33 +35,42 @@ func main() {
 		return
 	}
 
-	file := utils.GetSize(info.Size())
-	
+	var sizeBytes int64
+	if info.IsDir() {
+		sizeBytes, err = dirSize(filename)
+		if err != nil {
+			sizeBytes = info.Size()
+		}
+	} else {
+		sizeBytes = info.Size()
+	}
+	fileSize := getSize(sizeBytes)
+
 	// Print all output
 	fmt.Println()
 
 	fmt.Printf("%s %s\n",
 	red(fmt.Sprintf("%-14s", "Object Name ")),
-	utils.Wrap(info.Name()))
+	wrap(info.Name()))
 
 	fmt.Printf("%s %s\n", 
 	green(fmt.Sprintf("%-14s", "Object Size ")), 
-	utils.Wrap(file))
+	wrap(fileSize))
 
 	fmt.Printf("%s %s\n", 
 	blue(fmt.Sprintf("%-14s", "Permissions ")), 
-	utils.Wrap(utils.Tostr(info.Mode())))
+	wrap(toStr(info.Mode())))
 
 	fmt.Printf("%s %s\n", 
 	yellow(fmt.Sprintf("%-14s", "Is Directory? ")), 
-	utils.Wrap(utils.Tostr(info.IsDir())))
+	wrap(toStr(info.IsDir())))
 	
 	fmt.Printf("%s %s\n", 
 	pink(fmt.Sprintf("%-14s", "Absolute Path ")), 
-	utils.Wrap(absPath))
+	wrap(absPath))
 
 	fmt.Printf("%s %s\n", 
 	cyan(fmt.Sprintf("%-14s", "Last Modified ")), 
-	utils.Wrap(info.ModTime().Format(time.RFC1123)))
+	wrap(info.ModTime().Format(time.RFC1123)))
 }
 

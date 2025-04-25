@@ -1,8 +1,30 @@
-package utils
+package main
 
-import "fmt"
+import (
+	"fmt"
+    "io/fs"
+    "path/filepath"
+)
 
-func GetSize(size int64) string {
+func dirSize(root string) (int64, error) {
+	var total int64
+	err := filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return nil
+		}
+		if !d.IsDir() {
+			info, err := d.Info()
+			if err != nil {
+				return nil
+			}
+			total += info.Size()
+		}
+		return nil
+	})
+	return total, err
+}
+
+func getSize(size int64) string {
 	var fSize, unit string
 	switch {
 		case size >= 1024*1024*1024*1024: 
@@ -27,10 +49,10 @@ func GetSize(size int64) string {
 	return file
 }
 
-func Tostr(arg any) string {
+func toStr(arg any) string {
 	return fmt.Sprint(arg)
 }
 
-func Wrap(arg string) string {
+func wrap(arg string) string {
 	return "[ " + arg + " ]"
 }
