@@ -4,12 +4,9 @@
  
  <img src="photo.png" width="500px">
  
- ## install
- 
- go to releases and download a binary for your os
- then move it to /usr/local/bin/ and enjoy it with simple `gmfi` in terminal!
- then move it to `/usr/local/bin/` and enjoy it with simple `gmfi` in terminal!
+ ## Install
+Go to [releases](https://github.com/jvqtil/gmfi/releases/) and download latest binary for your OS, then move it to `/usr/local/bin/` and enjoy with simple `gmfi` in terminal!
 
-# Options: 
+## Options: 
 	-h, --help       Show this help message
 	-v, --version    Show version information`
