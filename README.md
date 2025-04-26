@@ -9,3 +9,7 @@
  go to releases and download a binary for your os
  then move it to /usr/local/bin/ and enjoy it with simple `gmfi` in terminal!
  then move it to `/usr/local/bin/` and enjoy it with simple `gmfi` in terminal!
+
+# Options: 
+	-h, --help       Show this help message
+	-v, --version    Show version information`
