@@ -1,8 +1,7 @@
 # gmfi
+Get file info fast and simple
  
- Get file info fast and simple
- 
- <img src="photo.png" width="500px">
+<img src="photo.png" width="500px">
 
 #### Feel free to contribute! 
  
@@ -13,6 +12,9 @@ Go to [releases](https://github.com/jvqtil/gmfi/releases/) and download latest b
 - Install [Go](https://go.dev/) and make sure it's working with `go version`
 - Clone repo
 - Run `go build` in repo directory, then move it to `/usr/local/bin/`
+
+## Usage
+`gmfi [filename]` to see file / dir info
 
 ## Options: 
 	-h, --help       Show the help 
