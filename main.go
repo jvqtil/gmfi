@@ -10,21 +10,22 @@ import (
 	"github.com/fatih/color"
 )
 
-func main() {
-	red := color.New(color.FgRed).SprintFunc()
-	blue := color.New(color.FgBlue).SprintFunc()
-	green := color.New(color.FgGreen).SprintFunc()
-	yellow := color.New(color.FgYellow).SprintFunc()
-	pink := color.New(color.FgMagenta).SprintFunc()
-	cyan := color.New(color.FgCyan).SprintFunc()
+var (
+	red    = color.New(color.FgRed).SprintFunc()
+	blue   = color.New(color.FgBlue).SprintFunc()
+	green  = color.New(color.FgGreen).SprintFunc()
+	yellow = color.New(color.FgYellow).SprintFunc()
+	pink   = color.New(color.FgMagenta).SprintFunc()
+	cyan   = color.New(color.FgCyan).SprintFunc()
+)
 
+func main() {
 	helpFlag := flag.Bool("help", false, "Show help and exit")
 	hFlag := flag.Bool("h", false, "Show help and exit (shorthand)")
 	versionFlag := flag.Bool("version", false, "Show version and exit")
 	vFlag := flag.Bool("v", false, "Show version and exit (shorthand)")
-	flag.Parse()
-
 	usageHelp := "\n" + "Usage: " + green("gmfi") + blue(" <filename>")
+	flag.Parse()
 
 	if *helpFlag || *hFlag {
 		const helpText = `
@@ -36,7 +37,7 @@ Options:
 		return
 	}
 	if *versionFlag || *vFlag {
-		const version = "1.3"
+		const version = "1.4"
 		fmt.Println("\nVersion:", green("gmfi"), wrap(version))
 		return
 	}
@@ -76,29 +77,10 @@ Options:
 
 	// Print all output
 	fmt.Println()
-
-	fmt.Printf("%s %s\n",
-	red(fmt.Sprintf("%-14s", "Object Name ")),
-	wrap(info.Name()))
-
-	fmt.Printf("%s %s\n", 
-	green(fmt.Sprintf("%-14s", "Object Size ")), 
-	wrap(fileSize))
-
-	fmt.Printf("%s %s\n", 
-	blue(fmt.Sprintf("%-14s", "Permissions ")), 
-	wrap(toStr(info.Mode())))
-
-	fmt.Printf("%s %s\n", 
-	yellow(fmt.Sprintf("%-14s", "Is Directory? ")), 
-	wrap(toStr(info.IsDir())))
-
-	fmt.Printf("%s %s\n", 
-	pink(fmt.Sprintf("%-14s", "Absolute Path ")), 
-	wrap(absPath))
-
-	fmt.Printf("%s %s\n", 
-	cyan(fmt.Sprintf("%-14s", "Last Modified ")), 
-	wrap(info.ModTime().Format(time.RFC1123)))
+	printer("Object Name", info.Name(), red)
+	printer("Object Size", fileSize, green)
+	printer("Permissions", toStr(info.Mode()), blue)
+	printer("Is Directory", toStr(info.IsDir()), yellow)
+	printer("Absolute Path", absPath, pink)
+	printer("Last Modified", info.ModTime().Format(time.RFC1123), cyan)
 }
-

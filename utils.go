@@ -56,3 +56,9 @@ func toStr(arg any) string {
 func wrap(arg string) string {
 	return "[ " + arg + " ]"
 }
+
+func printer(label string, value string, colorFunc func(a ...interface{}) string) {
+	if value != "" {
+		fmt.Printf("%s %s\n", colorFunc(fmt.Sprintf("%-14s", label)), wrap(value))
+	}
+}
