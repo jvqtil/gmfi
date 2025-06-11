@@ -1,10 +1,10 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
-	"flag"
 	"time"
 
 	"github.com/fatih/color"

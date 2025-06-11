@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-    "io/fs"
-    "path/filepath"
+	"io/fs"
+	"path/filepath"
 )
 
 func dirSize(root string) (int64, error) {
@@ -27,19 +27,19 @@ func dirSize(root string) (int64, error) {
 func getSize(size int64) string {
 	var fSize, unit string
 	switch {
-		case size >= 1024*1024*1024*1024: 
+	case size >= 1024*1024*1024*1024:
 		fSize = fmt.Sprintf("%.2f", float64(size)/(1024*1024*1024*1024))
 		unit = "TB"
-		case size >= 1024*1024*1024: 
+	case size >= 1024*1024*1024:
 		fSize = fmt.Sprintf("%.2f", float64(size)/(1024*1024*1024))
 		unit = "GB"
-		case size >= 1024*1024: 
+	case size >= 1024*1024:
 		fSize = fmt.Sprintf("%.2f", float64(size)/(1024*1024))
 		unit = "MB"
-		case size >= 1024: 
+	case size >= 1024:
 		fSize = fmt.Sprintf("%.2f", float64(size)/(1024))
 		unit = "KB"
-		default: 
+	default:
 		fSize = fmt.Sprintf("%d", size)
 		unit = "bytes"
 	}
