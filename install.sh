@@ -21,5 +21,5 @@ chmod +x "$FILE"
 echo "Successfully downloaded $FILE!"
 echo "Moving to /usr/local/bin, may require password"
 echo "If this fails please move the file to some bin directory in your PATH yourself"
-sudo mv ./$FILE /usr/local/bin/gmfi
+sudo mv $FILE /usr/local/bin/gmfi
 echo "Successfully moved to /usr/local/bin, now run with a simple *gmfi*"
