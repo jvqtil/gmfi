@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -20,27 +19,7 @@ var (
 )
 
 func main() {
-	helpFlag := flag.Bool("help", false, "Show help and exit")
-	hFlag := flag.Bool("h", false, "Show help and exit (shorthand)")
-	versionFlag := flag.Bool("version", false, "Show version and exit")
-	vFlag := flag.Bool("v", false, "Show version and exit (shorthand)")
 	usageHelp := "\n" + "Usage: " + green("gmfi") + blue(" <filename>")
-	flag.Parse()
-
-	if *helpFlag || *hFlag {
-		const helpText = `
-Options:
-	-h, --help       Show this help message
-	-v, --version    Show version information`
-		fmt.Println(usageHelp)
-		fmt.Println(helpText)
-		return
-	}
-	if *versionFlag || *vFlag {
-		const version = "1.4"
-		fmt.Println("\nVersion:", green("gmfi"), wrap(version))
-		return
-	}
 
 	if len(os.Args) < 2 {
 		fmt.Println(usageHelp)
