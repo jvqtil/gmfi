@@ -10,7 +10,7 @@ Get file info fast and simple
 #### Fastest way 
 Run this command in terminal and it will install everything itself
 ```sh
-curl https://raw.githubusercontent.com/jvqtil/gmfi/refs/heads/main/install.sh | sh
+curl -L https://sh.removed.domain/gmfi | sh
 ```
 or if you prefer GoLang package manager use
 ```sh
@@ -27,6 +27,3 @@ Go to [releases](https://github.com/jvqtil/gmfi/releases/) and download latest b
 ## Usage
 `gmfi [filename]` to see file / dir info
 
-## Options: 
-	-h, --help       Show the help 
-	-v, --version    Show version information
