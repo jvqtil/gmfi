@@ -31,6 +31,19 @@ jobs:
       - name: Build macos arm64
         run: GOOS=darwin GOARCH=arm64 go build -o dist/gmfi-macos-arm .
 
+      - name: Delete old tag (if exists)
+        run: |
+          git fetch --tags
+          if git rev-parse -q --verify "refs/tags/gmfi" >/dev/null; then
+            git tag -d gmfi
+            git push origin :refs/tags/gmfi
+          fi
+
+      - name: Create and push new tag
+        run: |
+          git tag gmfi
+          git push origin gmfi
+
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
