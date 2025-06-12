@@ -23,13 +23,13 @@ jobs:
           go-version: '1.24.3'
 
       - name: Build linux amd64
-        run: GOOS=linux GOARCH=amd64 go build -o dist/gmfi-linux-amd main.go
+        run: GOOS=linux GOARCH=amd64 go build -o dist/gmfi-linux-amd .
 
       - name: Build linux arm64
-        run: GOOS=linux GOARCH=arm64 go build -o dist/gmfi-linux-arm main.go
+        run: GOOS=linux GOARCH=arm64 go build -o dist/gmfi-linux-arm .
 
       - name: Build macos arm64
-        run: GOOS=darwin GOARCH=arm64 go build -o dist/gmfi-macos-arm main.go
+        run: GOOS=darwin GOARCH=arm64 go build -o dist/gmfi-macos-arm .
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
