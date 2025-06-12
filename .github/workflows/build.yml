@@ -61,3 +61,5 @@ jobs:
             dist/gmfi-linux-amd
             dist/gmfi-linux-arm
             dist/gmfi-macos-arm
+          draft: false
+          prerelease: false
