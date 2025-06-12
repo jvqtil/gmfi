@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/dustin/go-humanize"
 	"github.com/fatih/color"
 )
 
@@ -52,14 +53,16 @@ func main() {
 	} else {
 		sizeBytes = info.Size()
 	}
-	fileSize := getSize(sizeBytes)
+	fileSize := humanize.Bytes(uint64(sizeBytes))
+
+	permString := fmt.Sprintf("%o", info.Mode().Perm())
 
 	// Print all output
 	fmt.Println()
 	printer("Object Name", info.Name(), red)
 	printer("Object Size", fileSize, green)
-	printer("Permissions", toStr(info.Mode()), blue)
-	printer("Is Directory", toStr(info.IsDir()), yellow)
+	printer("Permissions", permString, blue)
+	printer("Is Directory", fmt.Sprint(info.IsDir()), yellow)
 	printer("Absolute Path", absPath, pink)
 	printer("Last Modified", info.ModTime().Format(time.RFC1123), cyan)
 }
