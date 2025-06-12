@@ -1,0 +1,48 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 'latest'
+
+      - name: Build linux amd64
+        run: GOOS=linux GOARCH=amd64 go build -o dist/gmfi-linux-amd main.go
+
+      - name: Build linux arm64
+        run: GOOS=linux GOARCH=arm64 go build -o dist/gmfi-linux-arm main.go
+
+      - name: Build macos arm64
+        run: GOOS=darwin GOARCH=arm64 go build -o dist/gmfi-macos-arm main.go
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: gmfi
+          name: gmfi
+          body: |
+            # files in release
+
+            - gmfi for linux amd64
+            - gmfi for linux arm64
+            - gmfi for macos arm64
+          files: |
+            dist/gmfi-linux-amd
+            dist/gmfi-linux-arm
+            dist/gmfi-macos-arm
