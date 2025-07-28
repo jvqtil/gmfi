@@ -1,4 +1,0 @@
-name: "install_gmfi"
-version: "@"
-description: "gmfi installer script"
-script: "https://raw.githubusercontent.com/jvqtil/gmfi/refs/heads/main/install.sh"

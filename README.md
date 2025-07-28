@@ -8,11 +8,7 @@ Get file info fast and simple
 ## Install
 
 #### Fastest way 
-Try [benomad](https://github.com/jvqtil/benomad/)! Thats the command
-```sh
-benomad install https://ben.removed.domain/jvqtil/gmfi/install_gmfi.ben
-```
-Or if you dont have benomad, run this command in terminal and it will install everything itself
+Just run this command in terminal and it will install everything itself
 ```sh
 curl -L https://sh.removed.domain/gmfi | sh
 ```
