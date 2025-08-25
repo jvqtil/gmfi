@@ -3,9 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 
-	"github.com/dustin/go-humanize"
 	"github.com/fatih/color"
 )
 
@@ -20,56 +18,40 @@ var (
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Printf("\nusage: %s %s\n", green("gmfi"), blue("<filename>"))
-		fmt.Printf(yellow("github.com/jvqtil/gmfi\n\n"))
+		fmt.Printf("\nusage: %s %s %s\n", green("gmfi"), blue("<filename>"), pink("[or more files]"))
+		fmt.Printf(yellow("github.com/jvqtil/gmfi\n"))
 		return
 	}
 
-	filename := os.Args[1]
-	info, err := os.Stat(filename)
-	if err != nil {
-		if os.IsNotExist(err) {
-			fmt.Printf(red("\nnot found %s :(\n\n"), filename)
-		} else {
-			fmt.Printf(red("\nerror! %s\n\n"), err.Error)
+	if os.Args[1] == "diff" {
+		if len(os.Args) != 4 {
+			fmt.Printf("\nusage: %s %s %s\n", green("gmfi"), red("diff"), blue("<file1> <file2>"))
+			return
 		}
+		diffFiles(os.Args[2], os.Args[3])
 		return
 	}
 
-	absPath, err := filepath.Abs(filename)
+	for _, filename := range os.Args[1:] {
+		showInfo(filename)
+	}
+}
+
+func showInfo(filename string) {
+	meta, err := GetFileMeta(filename)
 	if err != nil {
-		fmt.Printf(red("\nerror! %s\n\n"), err.Error)
+		fmt.Printf(red("\nerror reading %s\n"), filename)
 		return
 	}
-
-	var sizeBytes int64
-	if info.IsDir() {
-		sizeBytes, err = dirSize(filename)
-		if err != nil {
-			sizeBytes = info.Size()
-		}
-	} else {
-		sizeBytes = info.Size()
-	}
-	fileSize := humanize.Bytes(uint64(sizeBytes))
-
-	fileType, err := fileCmd(filename)
-	if err != nil {
-		fmt.Printf(red("\nerror! %s\n\n"), err.Error)
-		return
-	}
-
-	permString := fmt.Sprintf("%o", info.Mode().Perm())
 
 	fmt.Printf("\n> %s (%s) - %s [%s]\n",
-		red(info.Name()),
-		green(fileSize),
-		yellow(fileType),
-		blue(permString),
+		red(meta.Name),
+		green(meta.Size),
+		yellow(meta.Type),
+		blue(meta.Perm),
 	)
-
-	fmt.Printf("%s * %s\n\n",
-		pink(shortHome(absPath)),
-		cyan(info.ModTime().Format("02 Jan 2006 15:04")),
+	fmt.Printf("%s * %s\n",
+		pink(meta.Path),
+		cyan(meta.Mod),
 	)
 }
