@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"time"
 
 	"github.com/dustin/go-humanize"
 	"github.com/fatih/color"
@@ -20,10 +19,9 @@ var (
 )
 
 func main() {
-	usageHelp := "\n" + "Usage: " + green("gmfi") + blue(" <filename>")
-
 	if len(os.Args) < 2 {
-		fmt.Println(usageHelp)
+		fmt.Printf("\nusage: %s %s\n", green("gmfi"), blue("<filename>"))
+		fmt.Printf(yellow("github.com/jvqtil/gmfi\n\n"))
 		return
 	}
 
@@ -31,16 +29,16 @@ func main() {
 	info, err := os.Stat(filename)
 	if err != nil {
 		if os.IsNotExist(err) {
-			fmt.Println(red("\nNot found"), wrap(filename))
+			fmt.Printf(red("\nnot found %s :(\n\n"), filename)
 		} else {
-			fmt.Println(red("\nError"), wrap(err.Error()))
+			fmt.Printf(red("\nerror! %s\n\n"), err.Error)
 		}
 		return
 	}
 
 	absPath, err := filepath.Abs(filename)
 	if err != nil {
-		fmt.Println("\nError", wrap(err.Error()))
+		fmt.Printf(red("\nerror! %s\n\n"), err.Error)
 		return
 	}
 
@@ -55,14 +53,23 @@ func main() {
 	}
 	fileSize := humanize.Bytes(uint64(sizeBytes))
 
+	fileType, err := fileCmd(filename)
+	if err != nil {
+		fmt.Printf(red("\nerror! %s\n\n"), err.Error)
+		return
+	}
+
 	permString := fmt.Sprintf("%o", info.Mode().Perm())
 
-	// Print all output
-	fmt.Println()
-	printer("Object Name", info.Name(), red)
-	printer("Object Size", fileSize, green)
-	printer("Permissions", permString, blue)
-	printer("Is Directory", fmt.Sprint(info.IsDir()), yellow)
-	printer("Absolute Path", absPath, pink)
-	printer("Last Modified", info.ModTime().Format(time.RFC1123), cyan)
+	fmt.Printf("\n> %s (%s) - %s [%s]\n",
+		red(info.Name()),
+		green(fileSize),
+		yellow(fileType),
+		blue(permString),
+	)
+
+	fmt.Printf("%s * %s\n\n",
+		pink(shortHome(absPath)),
+		cyan(info.ModTime().Format("02 Jan 2006 15:04")),
+	)
 }

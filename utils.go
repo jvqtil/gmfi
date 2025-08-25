@@ -1,10 +1,41 @@
 package main
 
 import (
-	"fmt"
 	"io/fs"
+	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 )
+
+func shortHome(path string) string {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return path
+	}
+
+	if strings.HasPrefix(path, homeDir) {
+		return "~" + path[len(homeDir):]
+	}
+	return path
+}
+
+func fileCmd(path string) (string, error) {
+	cmd := exec.Command("file", path)
+	output, err := cmd.Output()
+	if err != nil {
+		return "", err
+	}
+
+	result := strings.TrimSpace(string(output))
+
+	// Remove "<filename>:" prefix
+	if idx := strings.Index(result, ":"); idx != -1 {
+		result = strings.TrimSpace(result[idx+1:])
+	}
+
+	return result, nil
+}
 
 func dirSize(root string) (int64, error) {
 	var total int64
@@ -22,14 +53,4 @@ func dirSize(root string) (int64, error) {
 		return nil
 	})
 	return total, err
-}
-
-func wrap(arg string) string {
-	return "[ " + arg + " ]"
-}
-
-func printer(label string, value string, colorFunc func(a ...interface{}) string) {
-	if value != "" {
-		fmt.Printf("%s %s\n", colorFunc(fmt.Sprintf("%-14s", label)), wrap(value))
-	}
 }
