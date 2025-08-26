@@ -1,11 +1,12 @@
 name: Build and Release
 
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - 'README.md'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g. v1.0.0)'
+        required: true
+        default: 'v1.0.0'
 
 permissions:
   contents: write
@@ -33,33 +34,14 @@ jobs:
       - name: Build macos arm64
         run: GOOS=darwin GOARCH=arm64 go build -o dist/gmfi-macos-arm .
 
-      - name: Delete old tag (if exists)
-        run: |
-          git fetch --tags
-          if git rev-parse -q --verify "refs/tags/gmfi" >/dev/null; then
-            git tag -d gmfi
-            git push origin :refs/tags/gmfi
-          fi
-
-      - name: Create and push new tag
-        run: |
-          git tag gmfi
-          git push origin gmfi
-
-      - name: Upload to GitHub Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: gmfi
-          name: gmfi
-          body: |
-            # files in release
-
-            - gmfi for linux amd64
-            - gmfi for linux arm64
-            - gmfi for macos arm64
+          tag_name: ${{ github.event.inputs.version }}
+          name: "Release ${{ github.event.inputs.version }}"
           files: |
             dist/gmfi-linux-amd
             dist/gmfi-linux-arm
             dist/gmfi-macos-arm
-          draft: false
-          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
