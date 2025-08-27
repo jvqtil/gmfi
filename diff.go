@@ -2,11 +2,25 @@ package main
 
 import (
 	"fmt"
+	"sync"
 )
 
 func diffFiles(f1, f2 string) {
-	meta1, err1 := GetFileMeta(f1)
-	meta2, err2 := GetFileMeta(f2)
+	var meta1, meta2 *FileMeta
+	var err1, err2 error
+	var wg sync.WaitGroup
+
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		meta1, err1 = GetFileMeta(f1)
+	}()
+	go func() {
+		defer wg.Done()
+		meta2, err2 = GetFileMeta(f2)
+	}()
+	wg.Wait()
+
 	if err1 != nil || err2 != nil {
 		if err1 != nil {
 			fmt.Println(red("error reading " + f1))

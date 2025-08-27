@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/exec"
+	"strconv"
 
 	"github.com/fatih/color"
 )
@@ -23,35 +25,63 @@ func main() {
 		return
 	}
 
-	if os.Args[1] == "diff" {
+	switch os.Args[1] {
+	case "diff":
 		if len(os.Args) != 4 {
 			fmt.Printf("\nusage: %s %s %s\n", green("gmfi"), red("diff"), blue("<file1> <file2>"))
 			return
 		}
 		diffFiles(os.Args[2], os.Args[3])
-		return
-	}
 
-	for _, filename := range os.Args[1:] {
-		showInfo(filename)
+	case "view":
+		file := os.Args[2]
+		_, err := exec.LookPath("fat")
+		if err != nil {
+			fmt.Println(red("fat is not installed — install it from github.com/Zuhaitz-dev/fat"))
+			return
+		}
+		cmd := exec.Command("fat", file)
+		cmd.Stdin = os.Stdin
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		cmd.Run()
+
+	case "big":
+		dir := "."
+		topN := 5
+
+		if len(os.Args) >= 3 {
+			if n, err := strconv.Atoi(os.Args[2]); err == nil {
+				topN = n
+			} else {
+				dir = os.Args[2]
+			}
+		}
+
+		if len(os.Args) >= 4 {
+			if n, err := strconv.Atoi(os.Args[3]); err == nil {
+				topN = n
+			} else {
+				dir = os.Args[3]
+			}
+		}
+
+		bigFiles(dir, topN)
+
+	default:
+		for _, file := range os.Args[1:] {
+			showInfo(file)
+		}
 	}
 }
 
-func showInfo(filename string) {
-	meta, err := GetFileMeta(filename)
+func showInfo(file string) {
+	meta, err := GetFileMeta(file)
 	if err != nil {
-		fmt.Printf(red("\nerror reading %s\n"), filename)
+		fmt.Printf(red("\nerror reading %s\n"), file)
 		return
 	}
 
-	fmt.Printf("\n> %s (%s) - %s [%s]\n",
-		red(meta.Name),
-		green(meta.Size),
-		yellow(meta.Type),
-		blue(meta.Perm),
-	)
-	fmt.Printf("%s * %s\n",
-		pink(meta.Path),
-		cyan(meta.Mod),
-	)
+	fmt.Printf("\n> %s (%s) - %s [%s]\n", red(meta.Name), green(meta.Size), yellow(meta.Type), blue(meta.Perm))
+	fmt.Printf("%s * %s\n", pink(meta.Path), cyan(meta.Mod))
 }
