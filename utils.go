@@ -13,17 +13,14 @@ import (
 	"github.com/dustin/go-humanize"
 )
 
-const defaultChanBuffer = 100
-
 type FileMeta struct {
-	Name, Size, Type, Perm, Mod, Path string
-}
-
-type FileMetaSimple struct {
-	Name string
-	Path string
-	Type string
-	Size int64
+	Name    string
+	Path    string
+	Type    string
+	Size    string
+	Perm    string
+	Mod     string
+	RawSize int64
 }
 
 func GetFileMeta(path string) (*FileMeta, error) {
@@ -34,74 +31,25 @@ func GetFileMeta(path string) (*FileMeta, error) {
 
 	abs, _ := filepath.Abs(path)
 	var size int64
+	var ftype string
 	if info.IsDir() {
-		size, _ = dirSize(rootClean(path))
+		size, _ = dirSize(path)
+		count := dirFileCount(path)
+		ftype = fmt.Sprintf("directory, %d files", count)
 	} else {
 		size = info.Size()
+		ftype, _ = fileCmd(path)
 	}
-	ftype, _ := fileCmd(path)
 
 	return &FileMeta{
-		Name: info.Name(),
-		Size: humanize.Bytes(uint64(size)),
-		Type: ftype,
-		Perm: fmt.Sprintf("%o", info.Mode().Perm()),
-		Mod:  info.ModTime().Format("02 Jan 2006 15:04"),
-		Path: shortHome(abs),
+		Name:    info.Name(),
+		Path:    shortHome(abs),
+		Type:    ftype,
+		Size:    humanize.Bytes(uint64(size)),
+		Perm:    fmt.Sprintf("%o", info.Mode().Perm()),
+		Mod:     info.ModTime().Format("02 Jan 2006 15:04"),
+		RawSize: size,
 	}, nil
-}
-
-func GetSimpleFileMeta(path string) (*FileMetaSimple, error) {
-	info, err := os.Stat(path)
-	if err != nil {
-		return nil, err
-	}
-	ftype, _ := fileCmd(path)
-	return &FileMetaSimple{
-		Name: info.Name(),
-		Path: path,
-		Type: ftype,
-		Size: info.Size(),
-	}, nil
-}
-
-func rootClean(path string) string {
-	cleaned, _ := filepath.Abs(path)
-	return cleaned
-}
-
-func showInfos(files []string) {
-	var wg sync.WaitGroup
-	var mu sync.Mutex
-	results := make([]*FileMeta, 0, len(files))
-	paths := make(chan string, len(files))
-	workerCount := getWorkerCount()
-
-	for i := 0; i < workerCount; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			for path := range paths {
-				meta, err := GetFileMeta(path)
-				if err == nil {
-					mu.Lock()
-					results = append(results, meta)
-					mu.Unlock()
-				}
-			}
-		}()
-	}
-
-	for _, f := range files {
-		paths <- f
-	}
-	close(paths)
-	wg.Wait()
-
-	for _, meta := range results {
-		fmt.Printf("\n> %s (%s) - %s [%s]\n", red(meta.Name), green(meta.Size), yellow(meta.Type), blue(meta.Perm))
-		fmt.Printf("%s * %s\n", pink(meta.Path), cyan(meta.Mod))
-	}
 }
 
 func shortHome(path string) string {
@@ -128,7 +76,7 @@ func dirSize(root string) (int64, error) {
 	var total int64
 	var mu sync.Mutex
 	var wg sync.WaitGroup
-	paths := make(chan string, defaultChanBuffer)
+	paths := make(chan string, 100)
 	workerCount := getWorkerCount()
 
 	for i := 0; i < workerCount; i++ {
@@ -156,6 +104,17 @@ func dirSize(root string) (int64, error) {
 	wg.Wait()
 
 	return total, nil
+}
+
+func dirFileCount(root string) int {
+	count := 0
+	filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
+		if err == nil && !d.IsDir() {
+			count++
+		}
+		return nil
+	})
+	return count
 }
 
 func getWorkerCount() int {

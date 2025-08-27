@@ -7,15 +7,14 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/dustin/go-humanize"
 	"github.com/schollz/progressbar/v3"
 )
 
 func bigFiles(root string, topN int) {
-	var files []FileMetaSimple
+	var files []FileMeta
 	var mu sync.Mutex
 	var wg sync.WaitGroup
-	paths := make(chan string, defaultChanBuffer)
+	paths := make(chan string, 100)
 	count := 0
 
 	filepath.WalkDir(root, func(path string, d os.DirEntry, err error) error {
@@ -33,7 +32,7 @@ func bigFiles(root string, topN int) {
 		go func() {
 			defer wg.Done()
 			for path := range paths {
-				meta, err := GetSimpleFileMeta(path)
+				meta, err := GetFileMeta(path)
 				if err == nil {
 					mu.Lock()
 					files = append(files, *meta)
@@ -59,7 +58,7 @@ func bigFiles(root string, topN int) {
 	}
 
 	sort.Slice(files, func(i, j int) bool {
-		return files[i].Size > files[j].Size
+		return files[i].RawSize > files[j].RawSize
 	})
 
 	if topN > len(files) {
@@ -72,7 +71,7 @@ func bigFiles(root string, topN int) {
 	fmt.Printf("\n%d biggest files in %s\n", topN, shortHome(root))
 	for i := 0; i < topN; i++ {
 		f := files[i]
-		fmt.Printf("\n%-10s %s\n", green(humanize.Bytes(uint64(f.Size))), pink(shortHome(f.Path)))
+		fmt.Printf("\n%-10s %s\n", green(f.Size), pink(shortHome(f.Path)))
 		fmt.Printf("%s\n", yellow(f.Type))
 	}
 }
