@@ -6,8 +6,6 @@ import (
 	"path/filepath"
 	"sort"
 	"sync"
-
-	"github.com/schollz/progressbar/v3"
 )
 
 func bigFiles(root string, topN int) {
@@ -15,16 +13,7 @@ func bigFiles(root string, topN int) {
 	var mu sync.Mutex
 	var wg sync.WaitGroup
 	paths := make(chan string, 100)
-	count := 0
 
-	filepath.WalkDir(root, func(path string, d os.DirEntry, err error) error {
-		if err == nil && !d.IsDir() {
-			count++
-		}
-		return nil
-	})
-
-	bar := progressbar.Default(int64(count), green(fmt.Sprintf("scanning files in %s", shortHome(root))))
 	workerCount := getWorkerCount()
 
 	for i := 0; i < workerCount; i++ {
@@ -38,7 +27,6 @@ func bigFiles(root string, topN int) {
 					files = append(files, *meta)
 					mu.Unlock()
 				}
-				bar.Add(1)
 			}
 		}()
 	}

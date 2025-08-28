@@ -23,10 +23,10 @@ func diffFiles(f1, f2 string) {
 
 	if err1 != nil || err2 != nil {
 		if err1 != nil {
-			fmt.Println(red("error reading " + f1))
+			fmt.Printf(red("\nerror reading %s\n"), f1)
 		}
 		if err2 != nil {
-			fmt.Println(red("error reading " + f2))
+			fmt.Printf(red("\nerror reading %s\n"), f2)
 		}
 		return
 	}

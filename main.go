@@ -21,7 +21,7 @@ var (
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Printf("\nusage: %s %s %s\n", green("gmfi"), blue("<filename>"), pink("[or more files]"))
-		fmt.Printf(yellow("github.com/jvqtil/gmfi\n"))
+		fmt.Printf(yellow("\ngithub.com/jvqtil/gmfi\n"))
 		return
 	}
 
@@ -34,10 +34,13 @@ func main() {
 		diffFiles(os.Args[2], os.Args[3])
 
 	case "view":
+		if len(os.Args) < 3 {
+			fmt.Println("\nusage: %s %s %s\n", green("gmfi"), red("view"), blue("<filename"))
+		}
 		file := os.Args[2]
 		_, err := exec.LookPath("fat")
 		if err != nil {
-			fmt.Println(red("fat is not installed — install it from github.com/Zuhaitz-dev/fat"))
+			fmt.Printf(red("fat is not installed — install it from github.com/Zuhaitz-dev/fat\n"))
 			return
 		}
 		cmd := exec.Command("fat", file)
@@ -68,11 +71,35 @@ func main() {
 
 		bigFiles(dir, topN)
 
+	case "tree":
+		dir := "."
+		if len(os.Args) >= 3 {
+			dir = os.Args[2]
+		}
+		treeCommand(dir)
+
+	case "help":
+		printHelp()
+		return
+
 	default:
 		for _, file := range os.Args[1:] {
 			showInfo(file)
 		}
 	}
+}
+
+func printHelp() {
+	fmt.Printf("\nusage: %s %s %s\n\n", green("gmfi"), blue("<filename>"), pink("[or more files]"))
+
+	fmt.Printf("%s > %s\n", blue("diff"), "compare two files")
+	fmt.Printf("%s > %s\n", blue("view"), "view file or archive contents (via FAT)")
+	fmt.Printf("%s > %s\n", blue("tree"), "display folder structure")
+	fmt.Printf("%s  > %s\n", blue("big"), "show biggest files in a directory")
+	fmt.Printf("%s > %s\n", blue("help"), "show this help message")
+
+	fmt.Printf("\n%s\n", yellow("github.com/jvqtil/gmfi"))
+	return
 }
 
 func showInfo(file string) {
@@ -84,4 +111,5 @@ func showInfo(file string) {
 
 	fmt.Printf("\n> %s (%s) - %s [%s]\n", red(meta.Name), green(meta.Size), yellow(meta.Type), blue(meta.Perm))
 	fmt.Printf("%s * %s\n", pink(meta.Path), cyan(meta.Mod))
+	return
 }
