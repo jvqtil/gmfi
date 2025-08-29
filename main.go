@@ -111,11 +111,13 @@ func main() {
 func printHelp() {
 	fmt.Printf("\nusage: %s %s %s\n\n", green("gmfi"), blue("<filename>"), pink("[or more files]"))
 
-	fmt.Printf("%s > %s\n", blue("diff"), "compare two files")
-	fmt.Printf("%s > %s\n", blue("view"), "view file or archive contents (via FAT)")
-	fmt.Printf("%s > %s\n", blue("tree"), "display folder structure")
-	fmt.Printf("%s  > %s\n", blue("big"), "show biggest files in a directory")
-	fmt.Printf("%s > %s\n", blue("help"), "show this help message")
+	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "search")), "find files in directory")
+	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "diff")), "compare two files")
+	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "view")), "view file or archive contents (via FAT)")
+	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "tree")), "display folder structure")
+	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "big")), "show biggest files in a directory")
+	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "exif")), "run exiftool to check exif data for any file")
+	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "help")), "show this help message")
 
 	fmt.Printf("\n%s\n", yellow("github.com/jvqtil/gmfi"))
 	return
