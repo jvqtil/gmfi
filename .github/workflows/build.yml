@@ -52,6 +52,8 @@ jobs:
           tag_name: gmfi
           name: gmfi
           body: |
+            Kindly brought to you by [@thefatbot](https://github.com/thefatbot/), as always 
+
             # files in release
 
             - gmfi for linux amd64
