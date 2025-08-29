@@ -9,6 +9,7 @@ import (
 	"runtime"
 	"strings"
 	"sync"
+	"sync/atomic"
 
 	"github.com/dustin/go-humanize"
 )
@@ -74,7 +75,6 @@ func fileCmd(path string) (string, error) {
 
 func dirSize(root string) (int64, error) {
 	var total int64
-	var mu sync.Mutex
 	var wg sync.WaitGroup
 	paths := make(chan string, 100)
 	workerCount := getWorkerCount()
@@ -86,9 +86,7 @@ func dirSize(root string) (int64, error) {
 			for path := range paths {
 				info, err := os.Stat(path)
 				if err == nil {
-					mu.Lock()
-					total += info.Size()
-					mu.Unlock()
+					atomic.AddInt64(&total, info.Size())
 				}
 			}
 		}()

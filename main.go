@@ -35,7 +35,7 @@ func main() {
 
 	case "view":
 		if len(os.Args) < 3 {
-			fmt.Println("\nusage: %s %s %s\n", green("gmfi"), red("view"), blue("<filename"))
+			fmt.Println("\nusage: %s %s %s\n", green("gmfi"), red("view"), blue("<filename>"))
 		}
 		file := os.Args[2]
 		_, err := exec.LookPath("fat")
@@ -77,6 +77,25 @@ func main() {
 			dir = os.Args[2]
 		}
 		treeCommand(dir)
+
+	case "search":
+		if len(os.Args) < 3 {
+			fmt.Printf("\nusage: %s %s %s %s\n", green("gmfi"), red("search"), blue("<pattern>"), pink("[path]"))
+			return
+		}
+		pattern := os.Args[2]
+		path := "."
+		if len(os.Args) >= 4 {
+			path = os.Args[3]
+		}
+		searchIn(pattern, path)
+
+	case "exif":
+		if len(os.Args) < 3 {
+			fmt.Printf("\nusage: %s %s %s\n", green("gmfi"), red("exif"), blue("<file>"))
+			return
+		}
+		getExif(os.Args[2])
 
 	case "help":
 		printHelp()
