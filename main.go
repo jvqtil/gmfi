@@ -49,7 +49,7 @@ func main() {
 		cmd.Stderr = os.Stderr
 		cmd.Run()
 
-	case "big":
+	case "big", "small":
 		dir := "."
 		topN := 5
 
@@ -69,7 +69,17 @@ func main() {
 			}
 		}
 
-		bigFiles(dir, topN)
+		var sort string
+		if os.Args[1] == "big" {
+			sort = "big"
+		} else if os.Args[1] == "small" {
+			sort = "small"
+		} else {
+			fmt.Printf("\n%s\n", "incorrect syntax!")
+			return
+		}
+
+		filesSort(sort, dir, topN)
 
 	case "tree":
 		dir := "."
@@ -116,6 +126,7 @@ func printHelp() {
 	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "view")), "view file or archive contents (via FAT)")
 	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "tree")), "display folder structure")
 	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "big")), "show biggest files in a directory")
+	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "small")), "show smallest files in a directory")
 	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "exif")), "run exiftool to check exif data for any file")
 	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "help")), "show this help message")
 

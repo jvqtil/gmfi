@@ -8,7 +8,7 @@ import (
 	"sync"
 )
 
-func bigFiles(root string, topN int) {
+func filesSort(sortType string, root string, topN int) {
 	var files []FileMeta
 	var mu sync.Mutex
 	var wg sync.WaitGroup
@@ -41,12 +41,17 @@ func bigFiles(root string, topN int) {
 	wg.Wait()
 
 	if len(files) == 0 {
-		fmt.Println("No files found")
+		fmt.Printf("\n%s\n", "no files found :(")
 		return
 	}
 
 	sort.Slice(files, func(i, j int) bool {
-		return files[i].RawSize > files[j].RawSize
+		if sortType == "big" {
+			return files[i].RawSize > files[j].RawSize
+		} else if sortType == "small" {
+			return files[i].RawSize < files[j].RawSize
+		}
+		return false
 	})
 
 	if topN > len(files) {
@@ -56,7 +61,14 @@ func bigFiles(root string, topN int) {
 		root = "current directory"
 	}
 
-	fmt.Printf("\n%d biggest files in %s\n", topN, shortHome(root))
+	title := "files"
+	if sortType == "big" {
+		title = "biggest files"
+	} else if sortType == "small" {
+		title = "smallest files"
+	}
+
+	fmt.Printf("\n%d %s in %s\n", topN, title, shortHome(root))
 	for i := 0; i < topN; i++ {
 		f := files[i]
 		fmt.Printf("\n%-10s %s\n", green(f.Size), pink(shortHome(f.Path)))
