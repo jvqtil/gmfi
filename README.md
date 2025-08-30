@@ -25,5 +25,17 @@ Go to [releases](https://github.com/jvqtil/gmfi/releases/) and download latest b
 - Run `go build` in repo directory, then move it to `/usr/local/bin/`
 
 ## Usage
-`gmfi [filename]` to see file / dir info
+The main app command is `gmfi <filename> [or more files]` to see file / dir info
 
+Oh, and this is `gmfi help` btw, the list of all commands available
+to get help of any just use `gmfi <command>`, it will show the syntax 
+```
+gmfi search <what> [where]    > find files in directory
+gmfi diff <what> <with what>  > compare two files
+gmfi view <file>              > view file or archive contents (via FAT)
+gmfi tree [dir]               > display folder structure
+gnfi big [where] [count]      > show biggest files in a directory
+gmfi small [where] [count]    > show smallest files in a directory
+gmfi exif <file>              > run exiftool to check exif data for any file
+gmfi help                     > show the help message
+```
