@@ -8,7 +8,7 @@ import (
 	"sync"
 )
 
-func filesSort(sortType string, root string, topN int) {
+func filesSort(sortBy string, root string, topN int) {
 	var files []FileMeta
 	var mu sync.Mutex
 	var wg sync.WaitGroup
@@ -46,9 +46,11 @@ func filesSort(sortType string, root string, topN int) {
 	}
 
 	sort.Slice(files, func(i, j int) bool {
-		if sortType == "big" {
+		switch sortBy {
+
+		case "big":
 			return files[i].RawSize > files[j].RawSize
-		} else if sortType == "small" {
+		case "small":
 			return files[i].RawSize < files[j].RawSize
 		}
 		return false
@@ -62,9 +64,10 @@ func filesSort(sortType string, root string, topN int) {
 	}
 
 	title := "files"
-	if sortType == "big" {
+	switch sortBy {
+	case "big":
 		title = "biggest files"
-	} else if sortType == "small" {
+	case "small":
 		title = "smallest files"
 	}
 

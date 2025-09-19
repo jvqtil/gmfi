@@ -35,7 +35,7 @@ func main() {
 
 	case "view":
 		if len(os.Args) < 3 {
-			fmt.Println("\nusage: %s %s %s\n", green("gmfi"), red("view"), blue("<filename>"))
+			fmt.Printf("\nusage: %s %s %s\n", green("gmfi"), red("view"), blue("<filename>"))
 		}
 		file := os.Args[2]
 		_, err := exec.LookPath("fat")
@@ -70,11 +70,12 @@ func main() {
 		}
 
 		var sort string
-		if os.Args[1] == "big" {
+		switch os.Args[1] {
+		case "big":
 			sort = "big"
-		} else if os.Args[1] == "small" {
+		case "small":
 			sort = "small"
-		} else {
+		default:
 			fmt.Printf("\n%s\n", "incorrect syntax!")
 			return
 		}
@@ -131,7 +132,6 @@ func printHelp() {
 	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "help")), "show this help message")
 
 	fmt.Printf("\n%s\n", yellow("github.com/jvqtil/gmfi"))
-	return
 }
 
 func showInfo(file string) {
@@ -143,5 +143,4 @@ func showInfo(file string) {
 
 	fmt.Printf("\n> %s (%s) - %s [%s]\n", red(meta.Name), green(meta.Size), yellow(meta.Type), blue(meta.Perm))
 	fmt.Printf("%s * %s\n", pink(meta.Path), cyan(meta.Mod))
-	return
 }
