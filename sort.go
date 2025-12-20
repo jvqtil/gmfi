@@ -16,7 +16,7 @@ func filesSort(sortBy string, root string, topN int) {
 
 	workerCount := getWorkerCount()
 
-	for i := 0; i < workerCount; i++ {
+	for range workerCount {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()

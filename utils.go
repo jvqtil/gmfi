@@ -37,7 +37,7 @@ func dirSize(root string) (int64, error) {
 	paths := make(chan string, 100)
 	workerCount := getWorkerCount()
 
-	for i := 0; i < workerCount; i++ {
+	for range workerCount {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
@@ -74,9 +74,6 @@ func dirFileCount(root string) int {
 }
 
 func getWorkerCount() int {
-	count := runtime.NumCPU() - 1
-	if count < 1 {
-		count = 1
-	}
+	count := max(runtime.NumCPU()-1, 1)
 	return count
 }
