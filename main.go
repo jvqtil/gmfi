@@ -29,16 +29,13 @@ func main() {
 			return
 		}
 		file := os.Args[2]
-		var bat string
-		bat, err := exec.LookPath("less")
-		if err != nil {
-			bat = "/bin/cat"
+		viewer := "/bin/cat"
+		if v, err = exec.LookPath("bat"); err != nil {
+			viewer = v
+		} else if v, err = exec.LookPath("less"); err != nil {
+			viewer = v
 		}
-		bat, err = exec.LookPath("bat")
-		if err != nil {
-			bat = "/bin/cat"
-		}
-		cmd := exec.Command(bat, file)
+		cmd := exec.Command(viewer, file)
 		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
