@@ -8,7 +8,7 @@ import (
 
 func getExif(file string) {
 	if _, err := exec.LookPath("exiftool"); err != nil {
-		fmt.Printf("\n%s\n", red("exiftool is not installed — get it from https://exiftool.org/"))
+		fmt.Printf("\n%s\n", red("exiftool is not installed (or not in $PATH) — get it from https://exiftool.org/ or add to your $PATH"))
 		return
 	}
 

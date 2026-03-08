@@ -31,7 +31,7 @@ func diffFiles(f1, f2 string) {
 		return
 	}
 
-	fmt.Printf("\n> Comparing %s and %s\n\n", red(meta1.Name), green(meta2.Name))
+	fmt.Printf("\n> Comparing %s with %s\n\n", red(meta1.Name), green(meta2.Name))
 	diff := false
 	diff = printDiff("Size", meta1.Size, meta2.Size, diff)
 	diff = printDiff("Type", meta1.Type, meta2.Type, diff)
@@ -66,6 +66,6 @@ func printDiff(label, v1, v2 string, changed bool) bool {
 		fmt.Printf("%-10s %s\n", label+":", colored)
 		return changed
 	}
-	fmt.Printf("%-10s %s > %s\n", label+":", red(v1), green(v2))
+	fmt.Printf("%-10s %s | %s\n", label+":", red(v1), green(v2))
 	return true
 }

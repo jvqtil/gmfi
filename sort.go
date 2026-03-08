@@ -66,15 +66,15 @@ func filesSort(sortBy string, root string, topN int) {
 	title := "files"
 	switch sortBy {
 	case "big":
-		title = "biggest files"
+		title = fmt.Sprintf(bold("biggest") + " files")
 	case "small":
-		title = "smallest files"
+		title = fmt.Sprintf(bold("smallest") + " files")
 	}
 
 	fmt.Printf("\n%d %s in %s\n", topN, title, shortHome(root))
 	for i := 0; i < topN; i++ {
 		f := files[i]
-		fmt.Printf("\n%-10s %s\n", green(f.Size), pink(shortHome(f.Path)))
+		fmt.Printf("\n%-10s %s %s\n", green(f.Size), pink(shortHome(f.Path)), blue(f.Mod))
 		fmt.Printf("%s\n", yellow(f.Type))
 	}
 }

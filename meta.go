@@ -42,7 +42,7 @@ func GetFileMeta(path string) (*FileMeta, error) {
 		Type:    ftype,
 		Size:    humanize.Bytes(uint64(size)),
 		Perm:    fmt.Sprintf("%o", info.Mode().Perm()),
-		Mod:     info.ModTime().Format("02 Jan 2006 15:04:05"),
+		Mod:     info.ModTime().Format("02 Jan 06 15:04"),
 		RawSize: size,
 	}, nil
 }

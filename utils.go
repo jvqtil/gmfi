@@ -9,6 +9,18 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
+
+	"github.com/fatih/color"
+)
+
+var (
+	red    = color.New(color.FgRed).SprintFunc()
+	blue   = color.New(color.FgBlue).SprintFunc()
+	green  = color.New(color.FgGreen).SprintFunc()
+	yellow = color.New(color.FgYellow).SprintFunc()
+	pink   = color.New(color.FgMagenta).SprintFunc()
+	cyan   = color.New(color.FgCyan).SprintFunc()
+	bold   = color.New(color.Bold).SprintFunc()
 )
 
 func shortHome(path string) string {

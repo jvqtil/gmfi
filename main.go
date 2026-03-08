@@ -5,22 +5,12 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
-
-	"github.com/fatih/color"
-)
-
-var (
-	red    = color.New(color.FgRed).SprintFunc()
-	blue   = color.New(color.FgBlue).SprintFunc()
-	green  = color.New(color.FgGreen).SprintFunc()
-	yellow = color.New(color.FgYellow).SprintFunc()
-	pink   = color.New(color.FgMagenta).SprintFunc()
-	cyan   = color.New(color.FgCyan).SprintFunc()
 )
 
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Printf("\nusage: %s %s %s\n", green("gmfi"), blue("<filename>"), pink("[or more files]"))
+		fmt.Printf("\nto get help, run gmfi help")
 		fmt.Printf(yellow("\ngithub.com/jvqtil/gmfi\n"))
 		return
 	}
@@ -33,17 +23,22 @@ func main() {
 		}
 		diffFiles(os.Args[2], os.Args[3])
 
-	case "view":
+	case "view", "see", "echo", "print":
 		if len(os.Args) < 3 {
 			fmt.Printf("\nusage: %s %s %s\n", green("gmfi"), red("view"), blue("<filename>"))
-		}
-		file := os.Args[2]
-		_, err := exec.LookPath("fat")
-		if err != nil {
-			fmt.Printf(red("fat is not installed — install it from github.com/Zuhaitz-dev/fat\n"))
 			return
 		}
-		cmd := exec.Command("fat", file)
+		file := os.Args[2]
+		var bat string
+		bat, err := exec.LookPath("less")
+		if err != nil {
+			bat = "/bin/cat"
+		}
+		bat, err = exec.LookPath("bat")
+		if err != nil {
+			bat = "/bin/cat"
+		}
+		cmd := exec.Command(bat, file)
 		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
@@ -69,18 +64,7 @@ func main() {
 			}
 		}
 
-		var sort string
-		switch os.Args[1] {
-		case "big":
-			sort = "big"
-		case "small":
-			sort = "small"
-		default:
-			fmt.Printf("\n%s\n", "incorrect syntax!")
-			return
-		}
-
-		filesSort(sort, dir, topN)
+		filesSort(os.Args[1], dir, topN)
 
 	case "tree":
 		dir := "."
@@ -108,7 +92,7 @@ func main() {
 		}
 		getExif(os.Args[2])
 
-	case "help":
+	case "--help", "-h":
 		printHelp()
 		return
 
@@ -124,7 +108,7 @@ func printHelp() {
 
 	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "search")), "find files in directory")
 	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "diff")), "compare two files")
-	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "view")), "view file or archive contents (via FAT)")
+	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "view")), "print file content with bat, less or cat")
 	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "tree")), "display folder structure")
 	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "big")), "show biggest files in a directory")
 	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "small")), "show smallest files in a directory")
