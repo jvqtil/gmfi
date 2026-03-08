@@ -1,6 +1,5 @@
 # gmfi
-The ultimate file info utility
-Get file info, directory tree, files diff, search files and <a href="#usage">much more</a>
+The ultimate files utility: get file(s) info, directory tree, files diff, search files and <a href="#usage">much more</a>
  
 <img src="screenshot.png" width="500px">
 
