@@ -2,7 +2,7 @@
 The ultimate file info utility
 Get file info, directory tree, files diff, search files and <a href="#usage">much more</a>
  
-<img src="photo.png" width="500px">
+<img src="screenshot.png" width="500px">
 
 #### Feel free to contribute! 
  
