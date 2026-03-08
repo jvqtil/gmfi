@@ -30,6 +30,8 @@ func main() {
 		}
 		file := os.Args[2]
 		viewer := "/bin/cat"
+		var v string
+		var err error
 		if v, err = exec.LookPath("bat"); err != nil {
 			viewer = v
 		} else if v, err = exec.LookPath("less"); err != nil {
