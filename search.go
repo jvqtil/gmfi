@@ -12,7 +12,7 @@ func searchIn(pattern, path string) {
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		if cmd.Run() != nil {
-			fmt.Printf(red("\nno matches for '%s' in %s :(\n"), pattern, path)
+			fmt.Printf(red("\nno matches for '%s' in %s\n"), pattern, path)
 		}
 		return
 	}
@@ -22,7 +22,7 @@ func searchIn(pattern, path string) {
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		if cmd.Run() != nil {
-			fmt.Printf(red("\nno matches for '%s' in %s :(\n"), pattern, path)
+			fmt.Printf(red("\nno matches for '%s' in %s\n"), pattern, path)
 		}
 		return
 	}

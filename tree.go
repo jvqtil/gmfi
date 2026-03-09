@@ -10,7 +10,7 @@ func treeCommand(root string) {
 	fmt.Printf("\n%s\n", shortHome(root))
 	err := walkTree(root, "")
 	if err != nil {
-		fmt.Printf(red("\nerror reading directory! %s\n"), err)
+		fmt.Printf("%s", red("\nerror reading directory\n"))
 	}
 }
 
@@ -52,7 +52,7 @@ func walkTree(path string, prefix string) error {
 		if entry.IsDir() {
 			err := walkTree(fullPath, subPrefix)
 			if err != nil {
-				fmt.Println(red("error:"), err)
+				fmt.Println(red(err))
 			}
 		}
 	}

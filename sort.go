@@ -41,7 +41,7 @@ func filesSort(sortBy string, root string, topN int) {
 	wg.Wait()
 
 	if len(files) == 0 {
-		fmt.Printf("\n%s\n", "no files found :(")
+		fmt.Printf("\n%s\n", "no files found")
 		return
 	}
 
@@ -66,9 +66,9 @@ func filesSort(sortBy string, root string, topN int) {
 	title := "files"
 	switch sortBy {
 	case "big":
-		title = fmt.Sprintf(bold("biggest") + " files")
+		title = fmt.Sprintf("%s files", bold("biggest"))
 	case "small":
-		title = fmt.Sprintf(bold("smallest") + " files")
+		title = fmt.Sprintf("%s files", bold("smallest"))
 	}
 
 	fmt.Printf("\n%d %s in %s\n", topN, title, shortHome(root))
