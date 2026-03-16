@@ -72,7 +72,7 @@ func main() {
 		}
 		treeCommand(dir)
 
-	case "search":
+	case "search", "find":
 		if len(os.Args) < 3 {
 			fmt.Printf("\nusage: %s %s %s %s\n", green("gmfi"), red("search"), blue("<pattern>"), pink("[path]"))
 			return
