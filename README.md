@@ -1,4 +1,4 @@
-# gmfi
+# gmfi [![Go Report Card](https://goreportcard.com/badge/github.com/jvqtil/gmfi)](https://goreportcard.com/report/github.com/jvqtil/gmfi)
 The ultimate files utility: get file(s) info, directory tree, files diff, search files and <a href="#usage">much more</a>
  
 <img src="screenshot.png" width="500px">
