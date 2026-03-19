@@ -11,7 +11,7 @@ import (
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Printf("\nusage: %s %s %s\n", green("gmfi"), blue("<filename>"), pink("[or more files]"))
-		fmt.Printf("\nto get help, run gmfi help")
+		fmt.Printf("\nfor help, run gmfi help")
 		fmt.Printf("\n%s\n", yellow("github.com/jvqtil/gmfi"))
 		return
 	}
