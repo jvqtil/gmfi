@@ -1,10 +1,11 @@
 module github.com/jvqtil/gmfi
 
-go 1.24.2
+go 1.26.1
 
 require (
 	github.com/dustin/go-humanize v1.0.1
 	github.com/fatih/color v1.18.0
+	github.com/jvqtil/view v0.0.0-20260316105730-e68fdd8dafc0
 )
 
 require (

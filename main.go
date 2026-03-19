@@ -3,8 +3,9 @@ package main
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"strconv"
+
+	"github.com/jvqtil/view"
 )
 
 func main() {
@@ -29,19 +30,12 @@ func main() {
 			return
 		}
 		file := os.Args[2]
-		viewer := "/bin/cat"
-		var v string
-		var err error
-		if v, err = exec.LookPath("bat"); err != nil {
-			viewer = v
-		} else if v, err = exec.LookPath("less"); err != nil {
-			viewer = v
+		data, err := os.ReadFile(file)
+		if err != nil {
+			fmt.Printf(red("\nfailed to read file %s\n"), file)
+			return
 		}
-		cmd := exec.Command(viewer, file)
-		cmd.Stdin = os.Stdin
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		cmd.Run()
+		view.Show(string(data))
 
 	case "big", "small":
 		dir := "."
