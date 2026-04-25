@@ -10,29 +10,27 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Printf("\nusage: %s %s %s\n", green("gmfi"), blue("<filename>"), pink("[or more files]"))
-		fmt.Printf("\nfor help, run gmfi help")
-		fmt.Printf("\n%s\n", yellow("github.com/jvqtil/gmfi"))
+		fmt.Printf("usage: %s %s %s\n", green("gmfi"), blue("<filename>"), pink("[or more files]"))
 		return
 	}
 
 	switch os.Args[1] {
 	case "diff":
 		if len(os.Args) != 4 {
-			fmt.Printf("\nusage: %s %s %s\n", green("gmfi"), red("diff"), blue("<file1> <file2>"))
+			fmt.Printf("usage: %s %s %s\n", green("gmfi"), red("diff"), blue("<what> <with what>"))
 			return
 		}
 		diffFiles(os.Args[2], os.Args[3])
 
 	case "view", "see", "echo", "print":
 		if len(os.Args) < 3 {
-			fmt.Printf("\nusage: %s %s %s\n", green("gmfi"), red("view"), blue("<filename>"))
+			fmt.Printf("usage: %s %s %s\n", green("gmfi"), red("view"), blue("<filename>"))
 			return
 		}
 		file := os.Args[2]
 		data, err := os.ReadFile(file)
 		if err != nil {
-			fmt.Printf(red("\nfailed to read file %s\n"), file)
+			fmt.Printf(red("failed to read file %s\n"), file)
 			return
 		}
 		view.Show(string(data))
@@ -66,9 +64,9 @@ func main() {
 		}
 		treeCommand(dir)
 
-	case "search", "find":
+	case "search", "find", "grep", "rg":
 		if len(os.Args) < 3 {
-			fmt.Printf("\nusage: %s %s %s %s\n", green("gmfi"), red("search"), blue("<pattern>"), pink("[path]"))
+			fmt.Printf("usage: %s %s %s %s\n", green("gmfi"), red("search"), blue("<pattern>"), pink("[path]"))
 			return
 		}
 		pattern := os.Args[2]
@@ -78,15 +76,12 @@ func main() {
 		}
 		searchIn(pattern, path)
 
-	case "exif":
-		if len(os.Args) < 3 {
-			fmt.Printf("\nusage: %s %s %s\n", green("gmfi"), red("exif"), blue("<file>"))
-			return
-		}
-		getExif(os.Args[2])
-
 	case "--help", "-h":
 		printHelp()
+		return
+
+	case "--version", "-v":
+		printVersion()
 		return
 
 	default:
@@ -97,27 +92,34 @@ func main() {
 }
 
 func printHelp() {
-	fmt.Printf("\nusage: %s %s %s\n\n", green("gmfi"), blue("<filename>"), pink("[or more files]"))
+	fmt.Printf("usage:\n")
+	fmt.Printf(" %s %s %s\n", green("gmfi"), blue("<filename>"), pink("[or more files]"))
 
-	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "search")), "find files in directory")
-	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "diff")), "compare two files")
-	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "view")), "print file content with bat, less or cat")
-	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "tree")), "display folder structure")
-	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "big")), "show biggest files in a directory")
-	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "small")), "show smallest files in a directory")
-	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "exif")), "run exiftool to check exif data for any file")
-	fmt.Printf("%s > %s\n", blue(fmt.Sprintf("%-6s", "help")), "show this help message")
+	fmt.Printf("commands:\n")
+	fmt.Printf(" %s > %s\n", blue(fmt.Sprintf("%-6s", "search")), "find files in directory")
+	fmt.Printf(" %s > %s\n", blue(fmt.Sprintf("%-6s", "diff")), "compare two files")
+	fmt.Printf(" %s > %s\n", blue(fmt.Sprintf("%-6s", "view")), "print file content with bat, less or cat")
+	fmt.Printf(" %s > %s\n", blue(fmt.Sprintf("%-6s", "tree")), "display folder structure")
+	fmt.Printf(" %s > %s\n", blue(fmt.Sprintf("%-6s", "big")), "show biggest files in a directory")
+	fmt.Printf(" %s > %s\n", blue(fmt.Sprintf("%-6s", "small")), "show smallest files in a directory")
 
-	fmt.Printf("\n%s\n", yellow("github.com/jvqtil/gmfi"))
+	fmt.Printf("flags:\n")
+	fmt.Printf(" %s | %s\n", pink("-h"), pink("--help"))
+	fmt.Printf(" %s | %s\n", pink("-v"), pink("--version"))
+
+	fmt.Printf("for more, see %s\n", yellow("https://github.com/jvqtil/gmfi/"))
+}
+
+func printVersion() {
+	fmt.Printf("gmfi %s | %s\n", version, build)
 }
 
 func showInfo(file string) {
 	meta, err := GetFileMeta(file)
 	if err != nil {
-		fmt.Printf(red("\nerror reading %s\n"), file)
+		fmt.Printf("%v\n", red(err))
 		return
 	}
 
-	fmt.Printf("\n> %s (%s) - %s [%s]\n", red(meta.Name), green(meta.Size), yellow(meta.Type), blue(meta.Perm))
-	fmt.Printf("%s * %s\n", pink(meta.Path), cyan(meta.Mod))
+	fmt.Printf("> %s (%s) - %s [%s] | %s\n", red(meta.Name), green(meta.Size), yellow(meta.Type), blue(meta.Perm), meta.Mod)
 }

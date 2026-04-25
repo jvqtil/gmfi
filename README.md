@@ -36,6 +36,15 @@ gmfi view <file>              > print file content with bat, less or cat
 gmfi tree [dir]               > display folder structure
 gnfi big [where] [count]      > show biggest files in a directory
 gmfi small [where] [count]    > show smallest files in a directory
-gmfi exif <file>              > run exiftool to check exif data for any file
 gmfi help                     > show the help message
+```
+
+## Other
+`gmfi` is built to be easy to integrate anywhere, for example, in emacs. This is an example function that you can bind on any keybind you like and enjoy gmfi without leaving your favourite editor.
+```elisp
+(defun rc/gmfi-it ()
+  (interactive)
+  (when-let ((file (buffer-file-name)))
+    (message "%s" (shell-command-to-string
+                   (concat "gmfi " (shell-quote-argument file))))))
 ```

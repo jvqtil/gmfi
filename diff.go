@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"path/filepath"
+
 	"sync"
 )
 
@@ -31,28 +33,33 @@ func diffFiles(f1, f2 string) {
 		return
 	}
 
-	fmt.Printf("\n> Comparing %s with %s\n\n", red(meta1.Name), green(meta2.Name))
+	fmt.Printf("> Comparing %s with %s\n\n", red(meta1.Name), green(meta2.Name))
 	printDiff("Size", meta1.Size, meta2.Size)
 	printDiff("Type", meta1.Type, meta2.Type)
+	printDiff("Path", meta1.Path, meta2.Path)
+	printDiff("Modified", meta1.Mod, meta2.Mod)
 	printDiff("Perms", meta1.Perm, meta2.Perm)
 }
 
-func printDiff(label, v1, v2 string) bool {
-	if v1 == v2 {
+func printDiff(label, v1, v2 string) {
+	if label == "Path" && filepath.Dir(v1) == filepath.Dir(v2) && v1 != v2 {
+		fmt.Printf("%-10s ./%s -> ./%s\n", label+":", red(filepath.Base(v1)), green(filepath.Base(v2)))
+	} else if v1 == v2 {
 		colored := v1
 		switch label {
-		case "Name":
-			colored = red(v1)
 		case "Size":
 			colored = green(v1)
 		case "Type":
 			colored = yellow(v1)
+		case "Modified":
+			colored = cyan(v1)
+		case "Path":
+			colored = pink(v1)
 		case "Perms":
 			colored = blue(v1)
 		}
 		fmt.Printf("%-10s %s\n", label+":", colored)
-		return false
+	} else {
+		fmt.Printf("%-10s %s -> %s\n", label+":", red(v1), green(v2))
 	}
-	fmt.Printf("%-10s %s -> %s\n", label+":", red(v1), green(v2))
-	return true
 }
