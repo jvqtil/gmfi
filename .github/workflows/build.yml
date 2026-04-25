@@ -28,13 +28,13 @@ jobs:
           go-version: '1.26.1'
 
       - name: Build linux amd64
-        run: GOOS=linux GOARCH=amd64 go build -o dist/gmfi-linux-amd64 .
+        run: GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="-s -w -buildid=" -o dist/gmfi-linux-amd64 .
 
       - name: Build linux arm64
-        run: GOOS=linux GOARCH=arm64 go build -o dist/gmfi-linux-arm64 .
+        run: GOOS=linux GOARCH=arm64 go build -trimpath -ldflags="-s -w -buildid=" -o dist/gmfi-linux-arm64 .
 
       - name: Build macos arm64
-        run: GOOS=darwin GOARCH=arm64 go build -o dist/gmfi-macos-arm64 .
+        run: GOOS=darwin GOARCH=arm64 go build -trimpath -ldflags="-s -w -buildid=" -o dist/gmfi-macos-arm64 .
 
       - name: Create tag
         run: |
