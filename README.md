@@ -36,7 +36,9 @@ gmfi view <file>              > print file content with bat, less or cat
 gmfi tree [dir]               > display folder structure
 gnfi big [where] [count]      > show biggest files in a directory
 gmfi small [where] [count]    > show smallest files in a directory
-gmfi help                     > show the help message
+
+gmfi -v | --version
+gmfi -h | --help
 ```
 
 ## Other
