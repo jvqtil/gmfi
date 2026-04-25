@@ -1,6 +1,5 @@
 .DS_Store
 gmfi
+dist
 go.sum
-todo.md
-tasky.json
-test.*
+TODO
