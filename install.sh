@@ -5,16 +5,16 @@ ARCH="$(uname -m)"
 FILE="unknown"
 
 case "$OS-$ARCH" in
-    linux-x86_64)   FILE="gmfi-linux-amd" ;;
-    linux-aarch64)  FILE="gmfi-linux-arm" ;;
-    darwin-arm64)   FILE="gmfi-macos-arm" ;;
+    linux-x86_64)   FILE="gmfi-linux-amd64" ;;
+    linux-aarch64)  FILE="gmfi-linux-arm64" ;;
+    darwin-arm64)   FILE="gmfi-macos-arm64" ;;
     *)
         echo "Unsupported OS/arch: $OS-$ARCH"
         exit 1
         ;;
 esac
 
-URL="https://github.com/jvqtil/gmfi/releases/download/gmfi/$FILE"
+URL="https://github.com/jvqtil/gmfi/releases/latest/download/$FILE"
 curl -L -O "$URL" || { echo "Download failed"; exit 1; }
 
 chmod +x "$FILE"
