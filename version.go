@@ -1,6 +1,6 @@
 package main
 
 const (
-	version = "v1.0"
-	build   = "2026-04-25"
+	version = "v1.0.1"
+	build   = "2026-04-28"
 )
