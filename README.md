@@ -10,7 +10,7 @@ The ultimate files utility: get file(s) info, directory tree, files diff, search
 #### Fastest way 
 Just run this command in terminal and it will install everything itself
 ```sh
-curl -L https://sh.removed.domain/gmfi | sh
+curl -L https://raw.githubusercontent.com/jvqtil/gmfi/refs/heads/master/install.sh | sh
 ```
 or if you prefer GoLang package manager use
 ```sh
