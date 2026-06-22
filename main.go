@@ -14,6 +14,14 @@ func main() {
 		return
 	}
 
+	hidden := true
+
+	for _, arg := range os.Args[2:] {
+		if arg == "-h" {
+			hidden = false
+		}
+	}
+
 	switch os.Args[1] {
 	case "diff":
 		if len(os.Args) != 4 {
@@ -59,10 +67,10 @@ func main() {
 
 	case "tree":
 		dir := "."
-		if len(os.Args) >= 3 {
+		if len(os.Args) >= 3 && os.Args[2] != "-h" {
 			dir = os.Args[2]
 		}
-		treeCommand(dir)
+		treeCommand(dir, hidden)
 
 	case "search", "find", "grep", "rg":
 		if len(os.Args) < 3 {
@@ -102,6 +110,8 @@ func printHelp() {
 	fmt.Printf(" %s > %s\n", blue(fmt.Sprintf("%-6s", "tree")), "display folder structure")
 	fmt.Printf(" %s > %s\n", blue(fmt.Sprintf("%-6s", "big")), "show biggest files in a directory")
 	fmt.Printf(" %s > %s\n", blue(fmt.Sprintf("%-6s", "small")), "show smallest files in a directory")
+
+	fmt.Printf(" use %s to exclude hidden files from tree\n", blue("-h"))
 
 	fmt.Printf("flags:\n")
 	fmt.Printf(" %s | %s\n", pink("-h"), pink("--help"))
