@@ -131,5 +131,5 @@ func showInfo(file string) {
 		return
 	}
 
-	fmt.Printf("> %s (%s) - %s [%s] | %s\n", red(meta.Name), green(meta.Size), yellow(meta.Type), blue(meta.Perm), meta.Mod)
+	fmt.Printf("> %s (%s) - %s [%s] | %s\n", red(meta.Name), green(meta.Size), yellow(meta.Type), blue(meta.Perm), cyan(meta.Mod))
 }
